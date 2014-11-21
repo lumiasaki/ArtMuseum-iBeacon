@@ -9,11 +9,9 @@
 #import "ViewController.h"
 
 @interface ViewController ()
-
-@property (strong, nonatomic) CLBeaconRegion *region;
-@property (strong, nonatomic) NSDictionary *beaconData;
-@property (strong, nonatomic) CBPeripheralManager *peripheralManager;
-
+{
+    CBPeripheralManager *peripheralManager;
+}
 @end
 
 @implementation ViewController
@@ -21,35 +19,57 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    _region = [[CLBeaconRegion alloc]initWithProximityUUID:[self defaultUUID] identifier:[self defaultIdentifier]];
+    
+    CLBeaconMajorValue major = 0;
+    
+    NSDictionary *beaconData = [self createBeaconDataWithUUID:[self defaultUUID] andMajorValue:major andIdentifier:[self defaultIdentifier]];
+    
+    if (beaconData) {
+        [self advertisingBeaconData:beaconData];
+    }
+    else
+        NSLog(@"beaconData is nil!");
+}
+
+- (NSDictionary *)createBeaconDataWithUUID:(NSUUID *)uuid andMajorValue:(CLBeaconMajorValue)majorValue andIdentifier:(NSString *)identifier
+{
+    CLBeaconRegion *region = [[CLBeaconRegion alloc]initWithProximityUUID:uuid major:majorValue identifier:identifier];
+    
+    NSDictionary *beaconForAdvertisingData = [region peripheralDataWithMeasuredPower:nil];
+    
+    return beaconForAdvertisingData;
+}
+
+-(void)advertisingBeaconData:(NSDictionary *)beaconData
+{
+    peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil options:nil];
+    
+    [peripheralManager startAdvertising:beaconData];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-- (IBAction)broadcastButtonPressed:(id)sender {
-    _beaconData = [_region peripheralDataWithMeasuredPower:nil];
-    
-    _peripheralManager = [[CBPeripheralManager alloc]initWithDelegate:self queue:nil];
-}
+
+#pragma mark - delegate method
 
 - (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheral
 {
-    if (peripheral.state == CBPeripheralManagerStatePoweredOn) {
+    if (peripheral.state == CBPeripheralManagerStateUnsupported) {
+        _statuLabel.text = @"DeviceNotSupport";
+    }
+    else if (peripheral.state == CBPeripheralManagerStatePoweredOn) {
         _statuLabel.text = @"Broadcasting...";
-        
-        [_peripheralManager startAdvertising:_beaconData];
     }
     else if (peripheral.state == CBPeripheralManagerStatePoweredOff) {
         _statuLabel.text = @"PowerdOff!";
         
-        [_peripheralManager stopAdvertising];
-    }
-    else if (peripheral.state == CBPeripheralManagerStateUnsupported) {
-        _statuLabel.text = @"DeviceNotSupport";
+        [peripheralManager stopAdvertising];
     }
 }
+
+#pragma mark - set default value
 
 - (NSUUID *)defaultUUID
 {
@@ -60,7 +80,7 @@
 
 - (NSString *)defaultIdentifier
 {
-    NSString *identifier = @"com.saki.iBeaconDemo";
+    NSString *identifier = @"com.lumiasaki.iBeaconDemo";
     
     return identifier;
 }

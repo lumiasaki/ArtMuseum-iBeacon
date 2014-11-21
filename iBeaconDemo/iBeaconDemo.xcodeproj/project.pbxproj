@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C7D8E3A1A1F39F100AB1A8A /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C7D8E391A1F39F100AB1A8A /* CoreBluetooth.framework */; };
+		0C7D8E3C1A1F39F800AB1A8A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C7D8E3B1A1F39F800AB1A8A /* CoreLocation.framework */; };
 		0CAB06181A0CA72C00E786B5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CAB06171A0CA72C00E786B5 /* main.m */; };
 		0CAB061B1A0CA72C00E786B5 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CAB061A1A0CA72C00E786B5 /* AppDelegate.m */; };
 		0CAB061E1A0CA72C00E786B5 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CAB061D1A0CA72C00E786B5 /* ViewController.m */; };
@@ -27,6 +29,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0C7D8E391A1F39F100AB1A8A /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		0C7D8E3B1A1F39F800AB1A8A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		0CAB06121A0CA72C00E786B5 /* iBeaconDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iBeaconDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CAB06161A0CA72C00E786B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0CAB06171A0CA72C00E786B5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -47,6 +51,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0C7D8E3C1A1F39F800AB1A8A /* CoreLocation.framework in Frameworks */,
+				0C7D8E3A1A1F39F100AB1A8A /* CoreBluetooth.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +69,8 @@
 		0CAB06091A0CA72C00E786B5 = {
 			isa = PBXGroup;
 			children = (
+				0C7D8E3B1A1F39F800AB1A8A /* CoreLocation.framework */,
+				0C7D8E391A1F39F100AB1A8A /* CoreBluetooth.framework */,
 				0CAB06141A0CA72C00E786B5 /* iBeaconDemo */,
 				0CAB062E1A0CA72C00E786B5 /* iBeaconDemoTests */,
 				0CAB06131A0CA72C00E786B5 /* Products */,
@@ -412,6 +420,7 @@
 				0CAB06371A0CA72C00E786B5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0CAB06381A0CA72C00E786B5 /* Build configuration list for PBXNativeTarget "iBeaconDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -420,6 +429,7 @@
 				0CAB063A1A0CA72C00E786B5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
