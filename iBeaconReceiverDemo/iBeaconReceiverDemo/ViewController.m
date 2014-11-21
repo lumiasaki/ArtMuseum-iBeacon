@@ -25,33 +25,60 @@
     _locationManager = [CLLocationManager new];
     _locationManager.delegate = self;
     
-    _region = [[CLBeaconRegion alloc]initWithProximityUUID:[self defaultUUID] identifier:[self defaultIdentifier]];
+    [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
+}
+
+- (void)registerBeaconRegionWithUUID:(NSUUID *)uuid andIdentifier:(NSString *)identifer
+{
+    _region = [[CLBeaconRegion alloc]initWithProximityUUID:uuid identifier:identifer];
     
     [_locationManager startMonitoringForRegion:_region];
 }
 
-- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
-{
-    [_locationManager startRangingBeaconsInRegion:_region];
-}
-
-- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
-{
-    [_locationManager stopRangingBeaconsInRegion:_region];
-    
-    _statuLabel.text = @"Beacon has exited";
-}
+#pragma mark - delegate method
 
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
 {
-    _statuLabel.text = @"Beacon has found";
-    
-    
+    if (beacons.count > 0) {
+        CLBeacon *closetBeacon = [beacons firstObject];
+        
+        if (closetBeacon.proximity == CLProximityNear) {
+            [self presentDetailsWithMajorValue:closetBeacon.major.integerValue];
+        }
+        else
+            [self dismissDetails];
+    }
 }
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+
+//- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
+//{
+//    [_locationManager startRangingBeaconsInRegion:_region];
+//}
+//
+//- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
+//{
+//    [_locationManager stopRangingBeaconsInRegion:_region];
+//
+//    _statuLabel.text = @"Beacon has exited";
+//}
+
+#pragma mark - private method
+
+- (void)presentDetailsWithMajorValue:(CLBeaconMajorValue)majorValue
+{
+    NSLog(@"The major value is %hu",majorValue);
+    
+    _statuLabel.text = [NSString stringWithFormat:@"No. %hu",majorValue];
 }
+
+- (void)dismissDetails
+{
+    NSLog(@"Now dismiss the details!");
+    
+    _statuLabel.text = @"No.";
+}
+
+#pragma mark - set default values
 
 - (NSUUID *)defaultUUID
 {
@@ -62,7 +89,7 @@
 
 - (NSString *)defaultIdentifier
 {
-    NSString *defaultIdentifier = @"com.saki.iBeaconDemo";
+    NSString *defaultIdentifier = @"com.lumiasaki.iBeaconDemo";
     
     return defaultIdentifier;
 }
