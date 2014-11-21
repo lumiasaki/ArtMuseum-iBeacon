@@ -25,14 +25,9 @@
     _locationManager = [CLLocationManager new];
     _locationManager.delegate = self;
     
-    [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
-}
-
-- (void)registerBeaconRegionWithUUID:(NSUUID *)uuid andIdentifier:(NSString *)identifer
-{
-    _region = [[CLBeaconRegion alloc]initWithProximityUUID:uuid identifier:identifer];
+    [self checkLocationServicesAuthorizationStatus];
     
-    [_locationManager startMonitoringForRegion:_region];
+    [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
 }
 
 #pragma mark - delegate method
@@ -63,6 +58,28 @@
 //}
 
 #pragma mark - private method
+
+- (void)registerBeaconRegionWithUUID:(NSUUID *)uuid andIdentifier:(NSString *)identifer
+{
+    _region = [[CLBeaconRegion alloc]initWithProximityUUID:uuid identifier:identifer];
+    
+    [_locationManager startMonitoringForRegion:_region];
+}
+
+- (void)checkLocationServicesAuthorizationStatus {
+    if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorizedAlways) {
+        NSLog(@"Status authorized! (ALWAYS)");
+    }
+    else if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined) {
+        NSLog(@"Status not determined.");
+    }
+    else if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted) {
+        NSLog(@"Status restricted.");
+    }
+    else if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+        NSLog(@"Status denied.");
+    }
+}
 
 - (void)presentDetailsWithMajorValue:(CLBeaconMajorValue)majorValue
 {
