@@ -14,6 +14,7 @@
 		0CAB06551A0CAC5B00E786B5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0CAB06541A0CAC5B00E786B5 /* Images.xcassets */; };
 		0CAB06581A0CAC5B00E786B5 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CAB06561A0CAC5B00E786B5 /* LaunchScreen.xib */; };
 		0CAB06641A0CAC5B00E786B5 /* iBeaconReceiverDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CAB06631A0CAC5B00E786B5 /* iBeaconReceiverDemoTests.m */; };
+		0CFD36C61A1F66600076CE33 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CFD36C51A1F66600076CE33 /* CoreLocation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		0CAB065D1A0CAC5B00E786B5 /* iBeaconReceiverDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iBeaconReceiverDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CAB06621A0CAC5B00E786B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0CAB06631A0CAC5B00E786B5 /* iBeaconReceiverDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iBeaconReceiverDemoTests.m; sourceTree = "<group>"; };
+		0CFD36C51A1F66600076CE33 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0CFD36C61A1F66600076CE33 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,6 +66,7 @@
 		0CAB063B1A0CAC5B00E786B5 = {
 			isa = PBXGroup;
 			children = (
+				0CFD36C51A1F66600076CE33 /* CoreLocation.framework */,
 				0CAB06461A0CAC5B00E786B5 /* iBeaconReceiverDemo */,
 				0CAB06601A0CAC5B00E786B5 /* iBeaconReceiverDemoTests */,
 				0CAB06451A0CAC5B00E786B5 /* Products */,
@@ -344,6 +348,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = iBeaconReceiverDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -354,6 +359,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = iBeaconReceiverDemo/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -412,6 +418,7 @@
 				0CAB06691A0CAC5B00E786B5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0CAB066A1A0CAC5B00E786B5 /* Build configuration list for PBXNativeTarget "iBeaconReceiverDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -420,6 +427,7 @@
 				0CAB066C1A0CAC5B00E786B5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

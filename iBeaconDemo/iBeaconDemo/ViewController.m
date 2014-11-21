@@ -25,6 +25,7 @@
     NSDictionary *beaconData = [self createBeaconDataWithUUID:[self defaultUUID] andMajorValue:major andIdentifier:[self defaultIdentifier]];
     
     if (beaconData) {
+        NSLog(@"Now start to advertising.");
         [self advertisingBeaconData:beaconData];
     }
     else

@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -16,22 +17,50 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Statu" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="69v-QM-1Rk">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Status" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="69v-QM-1Rk">
                                 <rect key="frame" x="225" y="168" width="150" height="21"/>
+                                <color key="backgroundColor" red="1" green="0.59025907519999998" blue="0.5276809335" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="150" id="8cF-Uc-niP"/>
+                                    <constraint firstAttribute="height" constant="21" id="0iv-r1-0he"/>
+                                    <constraint firstAttribute="width" constant="150" id="etg-8G-NTs"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="0iv-r1-0he"/>
+                                        <exclude reference="etg-8G-NTs"/>
+                                    </mask>
+                                </variation>
+                                <variation key="heightClass=regular" fixedFrame="YES">
+                                    <rect key="frame" x="225" y="389" width="150" height="21"/>
+                                </variation>
+                                <variation key="widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="0iv-r1-0he"/>
+                                        <include reference="etg-8G-NTs"/>
+                                    </mask>
+                                </variation>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="69v-QM-1Rk" firstAttribute="centerX" secondItem="kh9-bI-dsS" secondAttribute="centerX" id="9kK-aV-As7"/>
-                            <constraint firstItem="69v-QM-1Rk" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="148" id="eye-S2-QhI"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="69v-QM-1Rk" secondAttribute="bottom" constant="411" id="mQ2-sR-ZTz"/>
+                            <constraint firstItem="69v-QM-1Rk" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="109" id="Rvh-It-gcu"/>
+                            <constraint firstItem="69v-QM-1Rk" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="269" id="r6B-Js-2OR"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Rvh-It-gcu"/>
+                                <exclude reference="r6B-Js-2OR"/>
+                            </mask>
+                        </variation>
+                        <variation key="widthClass=compact">
+                            <mask key="constraints">
+                                <include reference="Rvh-It-gcu"/>
+                                <include reference="r6B-Js-2OR"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="statuLabel" destination="69v-QM-1Rk" id="uEW-go-rIu"/>

@@ -25,37 +25,41 @@
     _locationManager = [CLLocationManager new];
     _locationManager.delegate = self;
     
-    [self checkLocationServicesAuthorizationStatus];
+    _region.notifyEntryStateOnDisplay = YES;
+    
+//    [_locationManager requestWhenInUseAuthorization];
+    
+//    [self checkLocationServicesAuthorizationStatus];
     
     [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
 }
 
 #pragma mark - delegate method
-
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
 {
     if (beacons.count > 0) {
-        CLBeacon *closetBeacon = [beacons firstObject];
+        CLBeacon *closestBeacon = [beacons firstObject];
         
-        if (closetBeacon.proximity == CLProximityNear) {
-            [self presentDetailsWithMajorValue:closetBeacon.major.integerValue];
+        if (closestBeacon.proximity == CLProximityNear) {
+            [self presentDetailsWithMajorValue:closestBeacon.major.integerValue];
         }
         else
             [self dismissDetails];
     }
 }
 
-//- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
-//{
-//    [_locationManager startRangingBeaconsInRegion:_region];
-//}
-//
-//- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
-//{
-//    [_locationManager stopRangingBeaconsInRegion:_region];
-//
-//    _statuLabel.text = @"Beacon has exited";
-//}
+- (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
+{
+    [_locationManager startRangingBeaconsInRegion:_region];
+    NSLog(@"enter region.");
+}
+
+- (void)locationManager:(CLLocationManager *)manager didExitRegion:(CLRegion *)region
+{
+    [_locationManager stopRangingBeaconsInRegion:_region];
+
+    _statuLabel.text = @"region has exited";
+}
 
 #pragma mark - private method
 
@@ -64,6 +68,9 @@
     _region = [[CLBeaconRegion alloc]initWithProximityUUID:uuid identifier:identifer];
     
     [_locationManager startMonitoringForRegion:_region];
+//    [_locationManager startRangingBeaconsInRegion:_region];
+    
+    NSLog(@"Start monitoring region.");
 }
 
 - (void)checkLocationServicesAuthorizationStatus {
