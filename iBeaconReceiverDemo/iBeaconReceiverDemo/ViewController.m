@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "DetailModel.h"
 
 @interface ViewController ()
 
@@ -14,6 +15,8 @@
 
 @property (strong, nonatomic) CLBeaconRegion *region;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+
+@property (strong, nonatomic) DetailModel *sharedDetailModelManager;
 
 @end
 
@@ -31,17 +34,23 @@
     
 //    [self checkLocationServicesAuthorizationStatus];
     
+    _sharedDetailModelManager = [DetailModel sharedModelManager];
+    
     [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
 }
 
 #pragma mark - delegate method
+
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region
 {
     if (beacons.count > 0) {
         CLBeacon *closestBeacon = [beacons firstObject];
         
         if (closestBeacon.proximity == CLProximityNear) {
-            [self presentDetailsWithMajorValue:closestBeacon.major.integerValue];
+//            [self presentDetailsWithMajorValue:closestBeacon.major.integerValue]; //重写presentDetailsWithMajorValue
+            
+            NSString *exhibitName = [_sharedDetailModelManager exhibitNameByMajorValue:closestBeacon.major.intValue];
+            _statuLabel.text = exhibitName;
         }
         else
             [self dismissDetails];
@@ -50,6 +59,10 @@
 
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
 {
+    UILocalNotification *notification = [UILocalNotification new];
+    notification.alertBody = @"YOU HAVE ENTERED REGION.";
+    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+                                         
     [_locationManager startRangingBeaconsInRegion:_region];
     NSLog(@"enter region.");
 }
@@ -94,6 +107,7 @@
     
     _statuLabel.text = [NSString stringWithFormat:@"No. %hu",majorValue];
 }
+
 
 - (void)dismissDetails
 {

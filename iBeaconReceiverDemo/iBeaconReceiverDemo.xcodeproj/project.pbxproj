@@ -15,6 +15,8 @@
 		0CAB06581A0CAC5B00E786B5 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0CAB06561A0CAC5B00E786B5 /* LaunchScreen.xib */; };
 		0CAB06641A0CAC5B00E786B5 /* iBeaconReceiverDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CAB06631A0CAC5B00E786B5 /* iBeaconReceiverDemoTests.m */; };
 		0CFD36C61A1F66600076CE33 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CFD36C51A1F66600076CE33 /* CoreLocation.framework */; };
+		0CFD36CD1A20CE220076CE33 /* DetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CFD36CC1A20CE220076CE33 /* DetailModel.m */; };
+		0CFD36D01A20D00A0076CE33 /* ExhibitionDetails.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0CFD36CF1A20D00A0076CE33 /* ExhibitionDetails.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +44,9 @@
 		0CAB06621A0CAC5B00E786B5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0CAB06631A0CAC5B00E786B5 /* iBeaconReceiverDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iBeaconReceiverDemoTests.m; sourceTree = "<group>"; };
 		0CFD36C51A1F66600076CE33 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		0CFD36CB1A20CE220076CE33 /* DetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailModel.h; sourceTree = "<group>"; };
+		0CFD36CC1A20CE220076CE33 /* DetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailModel.m; sourceTree = "<group>"; };
+		0CFD36CF1A20D00A0076CE33 /* ExhibitionDetails.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ExhibitionDetails.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,10 +90,11 @@
 		0CAB06461A0CAC5B00E786B5 /* iBeaconReceiverDemo */ = {
 			isa = PBXGroup;
 			children = (
+				0CFD36CE1A20CFE10076CE33 /* Resource */,
+				0CFD36C71A20CD6D0076CE33 /* Controller */,
+				0CFD36C81A20CD9A0076CE33 /* Model */,
 				0CAB064B1A0CAC5B00E786B5 /* AppDelegate.h */,
 				0CAB064C1A0CAC5B00E786B5 /* AppDelegate.m */,
-				0CAB064E1A0CAC5B00E786B5 /* ViewController.h */,
-				0CAB064F1A0CAC5B00E786B5 /* ViewController.m */,
 				0CAB06511A0CAC5B00E786B5 /* Main.storyboard */,
 				0CAB06541A0CAC5B00E786B5 /* Images.xcassets */,
 				0CAB06561A0CAC5B00E786B5 /* LaunchScreen.xib */,
@@ -121,6 +127,32 @@
 				0CAB06621A0CAC5B00E786B5 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		0CFD36C71A20CD6D0076CE33 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				0CAB064E1A0CAC5B00E786B5 /* ViewController.h */,
+				0CAB064F1A0CAC5B00E786B5 /* ViewController.m */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		0CFD36C81A20CD9A0076CE33 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0CFD36CB1A20CE220076CE33 /* DetailModel.h */,
+				0CFD36CC1A20CE220076CE33 /* DetailModel.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		0CFD36CE1A20CFE10076CE33 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				0CFD36CF1A20D00A0076CE33 /* ExhibitionDetails.plist */,
+			);
+			name = Resource;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -205,6 +237,7 @@
 			files = (
 				0CAB06531A0CAC5B00E786B5 /* Main.storyboard in Resources */,
 				0CAB06581A0CAC5B00E786B5 /* LaunchScreen.xib in Resources */,
+				0CFD36D01A20D00A0076CE33 /* ExhibitionDetails.plist in Resources */,
 				0CAB06551A0CAC5B00E786B5 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -223,6 +256,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0CFD36CD1A20CE220076CE33 /* DetailModel.m in Sources */,
 				0CAB06501A0CAC5B00E786B5 /* ViewController.m in Sources */,
 				0CAB064D1A0CAC5B00E786B5 /* AppDelegate.m in Sources */,
 				0CAB064A1A0CAC5B00E786B5 /* main.m in Sources */,
