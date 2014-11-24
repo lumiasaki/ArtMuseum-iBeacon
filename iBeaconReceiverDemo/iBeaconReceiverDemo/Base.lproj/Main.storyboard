@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -44,27 +43,60 @@
                                     <rect key="frame" x="179" y="189" width="42" height="21"/>
                                 </variation>
                             </label>
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ygz-L5-x9K">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="400" id="qid-AF-1mx"/>
+                                    <constraint firstAttribute="height" constant="282" id="xoR-Q9-LHv"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="qid-AF-1mx"/>
+                                        <exclude reference="xoR-Q9-LHv"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="qid-AF-1mx"/>
+                                        <include reference="xoR-Q9-LHv"/>
+                                    </mask>
+                                </variation>
+                            </webView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="KwL-YK-5fC" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="130" id="CLW-2q-2Es"/>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="ygz-L5-x9K" secondAttribute="bottom" id="NLy-jG-UAB"/>
+                            <constraint firstItem="ygz-L5-x9K" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="SxY-Y4-qeU"/>
                             <constraint firstItem="KwL-YK-5fC" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="269" id="ovx-AN-MEI"/>
                         </constraints>
                         <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="ygz-L5-x9K"/>
+                            </mask>
                             <mask key="constraints">
+                                <exclude reference="SxY-Y4-qeU"/>
                                 <exclude reference="CLW-2q-2Es"/>
                                 <exclude reference="ovx-AN-MEI"/>
+                                <exclude reference="NLy-jG-UAB"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="ygz-L5-x9K"/>
+                            </mask>
                             <mask key="constraints">
+                                <include reference="SxY-Y4-qeU"/>
                                 <include reference="CLW-2q-2Es"/>
                                 <include reference="ovx-AN-MEI"/>
+                                <include reference="NLy-jG-UAB"/>
                             </mask>
                         </variation>
                     </view>
                     <connections>
                         <outlet property="statuLabel" destination="KwL-YK-5fC" id="NWV-uC-4TW"/>
+                        <outlet property="wikiWebView" destination="ygz-L5-x9K" id="mHw-vQ-o0h"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

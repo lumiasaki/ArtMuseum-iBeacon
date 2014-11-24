@@ -9,16 +9,13 @@
 #import "ViewController.h"
 
 @interface ViewController ()
-{
-    CBPeripheralManager *peripheralManager;
-}
+@property CBPeripheralManager *peripheralManager;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
     
     CLBeaconMajorValue major = 0;
     
@@ -43,9 +40,9 @@
 
 -(void)advertisingBeaconData:(NSDictionary *)beaconData
 {
-    peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil options:nil];
+    _peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil];
     
-    [peripheralManager startAdvertising:beaconData];
+    [_peripheralManager startAdvertising:beaconData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -55,18 +52,23 @@
 
 #pragma mark - delegate method
 
+- (void)peripheralManagerDidStartAdvertising:(CBPeripheralManager *)peripheral error:(NSError *)error
+{
+    NSLog(@"Error:%@",error);
+}
+
 - (void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheral
 {
     if (peripheral.state == CBPeripheralManagerStateUnsupported) {
         _statuLabel.text = @"DeviceNotSupport";
     }
     else if (peripheral.state == CBPeripheralManagerStatePoweredOn) {
-        _statuLabel.text = @"Broadcasting...";
+        _statuLabel.text = @"PowedOn!";
     }
     else if (peripheral.state == CBPeripheralManagerStatePoweredOff) {
         _statuLabel.text = @"PowerdOff!";
         
-        [peripheralManager stopAdvertising];
+        [peripheral stopAdvertising];
     }
 }
 

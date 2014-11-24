@@ -12,6 +12,7 @@
 @interface ViewController ()
 
 @property (weak, nonatomic) IBOutlet UILabel *statuLabel;
+@property (weak, nonatomic) IBOutlet UIWebView *wikiWebView;
 
 @property (strong, nonatomic) CLBeaconRegion *region;
 @property (strong, nonatomic) CLLocationManager *locationManager;
@@ -28,11 +29,17 @@
     _locationManager = [CLLocationManager new];
     _locationManager.delegate = self;
     
-    _region.notifyEntryStateOnDisplay = YES;
+    if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+        [_locationManager requestAlwaysAuthorization];
+    }
+    
+    _region.notifyOnEntry = YES;
+    
+    _wikiWebView.hidden = YES;
     
 //    [_locationManager requestWhenInUseAuthorization];
     
-//    [self checkLocationServicesAuthorizationStatus];
+//    [self checkLocationServicesAuthorizationStatus];  //Just for debug.
     
     _sharedDetailModelManager = [DetailModel sharedModelManager];
     
@@ -47,7 +54,7 @@
         CLBeacon *closestBeacon = [beacons firstObject];
         
         if (closestBeacon.proximity == CLProximityNear) {
-//            [self presentDetailsWithMajorValue:closestBeacon.major.integerValue]; //重写presentDetailsWithMajorValue
+            [self presentDetailsWithMajorValue:closestBeacon.major.integerValue];
             
             NSString *exhibitName = [_sharedDetailModelManager exhibitNameByMajorValue:closestBeacon.major.intValue];
             _statuLabel.text = exhibitName;
@@ -81,7 +88,6 @@
     _region = [[CLBeaconRegion alloc]initWithProximityUUID:uuid identifier:identifer];
     
     [_locationManager startMonitoringForRegion:_region];
-//    [_locationManager startRangingBeaconsInRegion:_region];
     
     NSLog(@"Start monitoring region.");
 }
@@ -105,15 +111,24 @@
 {
     NSLog(@"The major value is %hu",majorValue);
     
-    _statuLabel.text = [NSString stringWithFormat:@"No. %hu",majorValue];
+    NSString *urlString = [NSString stringWithFormat: @"http://en.wikipedia.org/wiki/%@",[_sharedDetailModelManager exhibitNameByMajorValue:majorValue]];
+    
+    NSURL *url = [NSURL URLWithString:urlString];
+    
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+    _wikiWebView.hidden = NO;
+    
+    [_wikiWebView loadRequest:request];
 }
-
 
 - (void)dismissDetails
 {
     NSLog(@"Now dismiss the details!");
     
     _statuLabel.text = @"No.";
+    
+    _wikiWebView.hidden = YES;
 }
 
 #pragma mark - set default values
