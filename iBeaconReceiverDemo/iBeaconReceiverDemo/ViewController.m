@@ -17,6 +17,7 @@
 @property (strong, nonatomic) CLBeaconRegion *region;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
+//@property (nonatomic, strong) NSURLSession *session;
 @property (strong, nonatomic) DetailModel *sharedDetailModelManager;
 
 @end
@@ -29,6 +30,10 @@
     _locationManager = [CLLocationManager new];
     _locationManager.delegate = self;
     
+//    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+//    
+//    _session = [NSURLSession sessionWithConfiguration:config];
+    
     if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
         [_locationManager requestAlwaysAuthorization];
     }
@@ -36,8 +41,6 @@
     _region.notifyOnEntry = YES;
     
     _wikiWebView.hidden = YES;
-    
-//    [_locationManager requestWhenInUseAuthorization];
     
 //    [self checkLocationServicesAuthorizationStatus];  //Just for debug.
     
@@ -53,7 +56,7 @@
     if (beacons.count > 0) {
         CLBeacon *closestBeacon = [beacons firstObject];
         
-        if (closestBeacon.proximity == CLProximityNear) {
+        if (closestBeacon.proximity == CLProximityNear || closestBeacon.proximity == CLProximityImmediate) {
             [self presentDetailsWithMajorValue:closestBeacon.major.integerValue];
             
             NSString *exhibitName = [_sharedDetailModelManager exhibitNameByMajorValue:closestBeacon.major.intValue];
@@ -116,6 +119,22 @@
     NSURL *url = [NSURL URLWithString:urlString];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    
+//    NSURLSessionDataTask *openWebpageTask = [_session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+//        
+//        NSHTTPURLResponse *httpRespons = (NSHTTPURLResponse *)response;
+//        
+//        if (httpRespons.statusCode == 200) {
+//            
+//            _wikiWebView.hidden = NO;
+//            
+//            [_wikiWebView loadData:data MIMEType:@"text/html" textEncodingName:@"utf-8" baseURL:nil];
+//        }
+//        else
+//            NSLog(@"%@",error);
+//    }];
+    
+//    [openWebpageTask resume];
     
     _wikiWebView.hidden = NO;
     
