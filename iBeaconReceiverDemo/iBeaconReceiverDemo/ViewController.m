@@ -9,6 +9,8 @@
 #import "ViewController.h"
 #import "DetailModel.h"
 
+static NSString *URL = @"http://localhost:8080/jsonFile.json";
+
 @interface ViewController ()
 
 @property (weak, nonatomic) IBOutlet UILabel *statuLabel;
@@ -17,7 +19,7 @@
 @property (strong, nonatomic) CLBeaconRegion *region;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
-//@property (nonatomic, strong) NSURLSession *session;
+@property (nonatomic, strong) NSURLSession *session;
 @property (strong, nonatomic) DetailModel *sharedDetailModelManager;
 
 @end
@@ -31,7 +33,7 @@
     _locationManager.delegate = self;
     
 //    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-//    
+
 //    _session = [NSURLSession sessionWithConfiguration:config];
     
     if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
@@ -120,22 +122,6 @@
     
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
-//    NSURLSessionDataTask *openWebpageTask = [_session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-//        
-//        NSHTTPURLResponse *httpRespons = (NSHTTPURLResponse *)response;
-//        
-//        if (httpRespons.statusCode == 200) {
-//            
-//            _wikiWebView.hidden = NO;
-//            
-//            [_wikiWebView loadData:data MIMEType:@"text/html" textEncodingName:@"utf-8" baseURL:nil];
-//        }
-//        else
-//            NSLog(@"%@",error);
-//    }];
-    
-//    [openWebpageTask resume];
-    
     _wikiWebView.hidden = NO;
     
     [_wikiWebView loadRequest:request];
@@ -148,6 +134,38 @@
     _statuLabel.text = @"No.";
     
     _wikiWebView.hidden = YES;
+}
+
+- (NSDictionary *)jsonFromURL:(NSURL *)url
+{
+    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+    
+    _session = [NSURLSession sessionWithConfiguration:config];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+    
+    [request setHTTPMethod:@"GET"];
+    
+    __block NSDictionary *dict = [NSDictionary new];
+    
+    NSURLSessionDataTask *dataTask = [_session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        
+        NSHTTPURLResponse *resp = (NSHTTPURLResponse *)response;
+        
+        if (resp.statusCode == 200) {
+            NSError *jsonError;
+            
+            dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
+            
+            NSLog(@"dict:%@",dict);
+        }
+        else
+            NSLog(@"Error:%@",error);
+    }];
+    
+    [dataTask resume];
+    
+    return dict;
 }
 
 #pragma mark - set default values
