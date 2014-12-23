@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "DetailModel.h"
 
-static NSString *URL = @"http://localhost:8080/jsonFile.json";
+static NSString *URL = @"http://localhost:8080/Exhibits.json";
 
 @interface ViewController ()
 
@@ -32,10 +32,6 @@ static NSString *URL = @"http://localhost:8080/jsonFile.json";
     _locationManager = [CLLocationManager new];
     _locationManager.delegate = self;
     
-//    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-
-//    _session = [NSURLSession sessionWithConfiguration:config];
-    
     if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
         [_locationManager requestAlwaysAuthorization];
     }
@@ -47,6 +43,8 @@ static NSString *URL = @"http://localhost:8080/jsonFile.json";
 //    [self checkLocationServicesAuthorizationStatus];  //Just for debug.
     
     _sharedDetailModelManager = [DetailModel sharedModelManager];
+    
+    [self jsonFromURL:[NSURL URLWithString:URL]];
     
     [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
 }
@@ -136,7 +134,7 @@ static NSString *URL = @"http://localhost:8080/jsonFile.json";
     _wikiWebView.hidden = YES;
 }
 
-- (NSDictionary *)jsonFromURL:(NSURL *)url
+- (void)jsonFromURL:(NSURL *)url
 {
     NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
     
@@ -146,26 +144,33 @@ static NSString *URL = @"http://localhost:8080/jsonFile.json";
     
     [request setHTTPMethod:@"GET"];
     
-    __block NSDictionary *dict = [NSDictionary new];
+    __block NSMutableArray *exhibits = [NSMutableArray new];
     
     NSURLSessionDataTask *dataTask = [_session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         
-        NSHTTPURLResponse *resp = (NSHTTPURLResponse *)response;
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         
-        if (resp.statusCode == 200) {
+        if (httpResponse.statusCode == 200) {
             NSError *jsonError;
             
-            dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
+            exhibits = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
             
-            NSLog(@"dict:%@",dict);
+            NSLog(@"array:%@",exhibits);
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //handle json data
+                [_sharedDetailModelManager createTable];
+                
+                NSMutableArray *exhibitsCollection = [_sharedDetailModelManager generateExhibitsCollection:exhibits];
+                
+                [_sharedDetailModelManager iteratorForExhibitsCollection:exhibitsCollection];
+            });
         }
         else
             NSLog(@"Error:%@",error);
     }];
     
     [dataTask resume];
-    
-    return dict;
 }
 
 #pragma mark - set default values
