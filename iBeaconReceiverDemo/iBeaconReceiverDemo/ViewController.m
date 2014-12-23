@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "DetailModel.h"
+#import "Exhibit.h"
 
 static NSString *URL = @"http://localhost:8080/Exhibits.json";
 
@@ -57,9 +58,10 @@ static NSString *URL = @"http://localhost:8080/Exhibits.json";
         CLBeacon *closestBeacon = [beacons firstObject];
         
         if (closestBeacon.proximity == CLProximityNear || closestBeacon.proximity == CLProximityImmediate) {
-            [self presentDetailsWithMajorValue:closestBeacon.major.integerValue];
+            [self presentDetailsWithExhibit:[self exhibitWithMajorValue:closestBeacon.major.integerValue]];
             
-            NSString *exhibitName = [_sharedDetailModelManager exhibitNameByMajorValue:closestBeacon.major.intValue];
+            NSString *exhibitName = [self exhibitWithMajorValue:closestBeacon.major.integerValue].exhibitName;
+            
             _statuLabel.text = exhibitName;
         }
         else
@@ -110,13 +112,16 @@ static NSString *URL = @"http://localhost:8080/Exhibits.json";
     }
 }
 
-- (void)presentDetailsWithMajorValue:(CLBeaconMajorValue)majorValue
+- (Exhibit *)exhibitWithMajorValue:(NSInteger)majorValue
 {
-    NSLog(@"The major value is %hu",majorValue);
+    Exhibit *exhibit = [_sharedDetailModelManager fetchExhibitWithMajor:majorValue];
     
-    NSString *urlString = [NSString stringWithFormat: @"http://en.wikipedia.org/wiki/%@",[_sharedDetailModelManager exhibitNameByMajorValue:majorValue]];
-    
-    NSURL *url = [NSURL URLWithString:urlString];
+    return exhibit;
+}
+
+- (void)presentDetailsWithExhibit:(Exhibit *)exhibit
+{
+    NSURL *url = [NSURL URLWithString:exhibit.exhibitURL];
     
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     
@@ -159,8 +164,6 @@ static NSString *URL = @"http://localhost:8080/Exhibits.json";
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 //handle json data
-                [_sharedDetailModelManager createTable];
-                
                 NSMutableArray *exhibitsCollection = [_sharedDetailModelManager generateExhibitsCollection:exhibits];
                 
                 [_sharedDetailModelManager iteratorForExhibitsCollection:exhibitsCollection];

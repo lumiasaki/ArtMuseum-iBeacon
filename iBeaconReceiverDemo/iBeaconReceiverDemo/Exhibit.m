@@ -10,11 +10,11 @@
 
 @implementation Exhibit
 
--(instancetype)initWithMinor:(NSInteger)minor url:(NSString *)url artist:(NSString *)artist exhibitName:(NSString *)exhibitName
+-(instancetype)initWithMajor:(NSInteger)majorValue url:(NSString *)url artist:(NSString *)artist exhibitName:(NSString *)exhibitName
 {
     self = [super init];
     if (self) {
-        _minor = minor;
+        _majorValue = majorValue;
         _exhibitURL = url;
         _artist = artist;
         _exhibitName = exhibitName;

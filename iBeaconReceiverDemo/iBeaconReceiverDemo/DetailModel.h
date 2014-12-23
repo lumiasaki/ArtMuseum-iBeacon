@@ -8,14 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import <FMDatabase.h>
+#import "Exhibit.h"
 
 @interface DetailModel : NSObject
 
 @property (nonatomic, strong) FMDatabase *database;
 
 + (instancetype)sharedModelManager;
-- (NSString *)exhibitNameByMajorValue:(int)majorValue;
 - (NSMutableArray *)generateExhibitsCollection:(NSMutableArray *)exhibits;
-- (void)createTable;
 - (void)iteratorForExhibitsCollection:(NSMutableArray *)exhibitsCollection;
+- (Exhibit *)fetchExhibitWithMajor:(NSInteger)majorValue;
 @end
