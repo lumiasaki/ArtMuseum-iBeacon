@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="vXZ-lx-hvc">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -105,10 +106,10 @@
                                 <exclude reference="QHp-Ao-dBo"/>
                                 <exclude reference="TgR-WP-3L9"/>
                                 <exclude reference="ie5-LL-e9t"/>
+                                <exclude reference="7CY-Au-6uv"/>
                                 <exclude reference="1Ca-xO-MKc"/>
                                 <exclude reference="Bb4-8t-47x"/>
                                 <exclude reference="l3j-72-Equ"/>
-                                <exclude reference="7CY-Au-6uv"/>
                                 <exclude reference="X0q-ue-qNm"/>
                                 <exclude reference="gqh-Ld-xF8"/>
                                 <exclude reference="rDU-si-RLx"/>
@@ -125,10 +126,10 @@
                                 <include reference="QHp-Ao-dBo"/>
                                 <include reference="TgR-WP-3L9"/>
                                 <include reference="ie5-LL-e9t"/>
+                                <include reference="7CY-Au-6uv"/>
                                 <include reference="1Ca-xO-MKc"/>
                                 <include reference="Bb4-8t-47x"/>
                                 <include reference="l3j-72-Equ"/>
-                                <include reference="7CY-Au-6uv"/>
                                 <exclude reference="Ihx-Tz-hbY"/>
                                 <include reference="X0q-ue-qNm"/>
                                 <include reference="gqh-Ld-xF8"/>
