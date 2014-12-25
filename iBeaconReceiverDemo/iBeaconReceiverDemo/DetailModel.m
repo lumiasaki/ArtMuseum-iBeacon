@@ -55,9 +55,9 @@
 
 - (Exhibit *)fetchExhibitWithMajor:(NSInteger)majorValue
 {
-    NSString *select = [NSString stringWithFormat:@"select * from Exhibits where id = '%ld'",(long)majorValue];
+    NSString *select = [NSString stringWithFormat:@"select * from Exhibits where major = '%ld'",(long)majorValue];
     
-    NSMutableArray *exhibits = [self dataForSql:select withParam:@[@"id",@"artist",@"exhibitName",@"url"] ];
+    NSMutableArray *exhibits = [self dataForSql:select withParam:@[@"major",@"artist",@"exhibitName",@"url"] ];
     
     if (exhibits.count == 1) {
         NSDictionary *exhibitInfo = [exhibits firstObject];
@@ -81,7 +81,7 @@
 - (void)saveToDatabase:(Exhibit *)exhibit
 {
     if ([_database open]) {
-        NSString *insert = [NSString stringWithFormat:@"insert into Exhibits (id,artist,exhibitName,url) values (0,'%@',\"%@\",'%@')",/*exhibit.majorValue,*/exhibit.artist,exhibit.exhibitName,exhibit.exhibitURL];
+        NSString *insert = [NSString stringWithFormat:@"insert into Exhibits (major,artist,exhibitName,url) values (%ld,'%@',\"%@\",'%@')",(long)exhibit.majorValue,exhibit.artist,exhibit.exhibitName,exhibit.exhibitURL];
         
         [_database executeUpdate:insert];
         
@@ -101,7 +101,10 @@
 
 - (Exhibit *)exhibitInstancefromDict:(NSDictionary *)exhibitInfo
 {
-    NSInteger majorValue = [[NSNumber numberWithInt:(int)[exhibitInfo valueForKey:@"id"]] integerValue] - 1;
+    NSNumberFormatter *numberFormatter = [NSNumberFormatter new];
+    NSNumber *major = [numberFormatter numberFromString:[exhibitInfo valueForKey:@"major"]];
+    
+    NSInteger majorValue = [major integerValue] - 1;
     NSString *url = (NSString *)[exhibitInfo valueForKey:@"url"];
     NSString *exhibitName = (NSString *)[exhibitInfo valueForKey:@"exhibitName"];
     NSString *artist = (NSString *)[exhibitInfo valueForKey:@"artist"];
@@ -117,7 +120,7 @@
         NSString *dropTable = @"drop table if exists Exhibits";
         [_database executeUpdate: dropTable];
         
-        NSString *createTable = @"create table if not exists Exhibits (id int,artist text,exhibitName text,url text)";
+        NSString *createTable = @"create table if not exists Exhibits (major int,artist text,exhibitName text,url text)";
         [_database executeUpdate: createTable];
         
         [_database close];

@@ -58,11 +58,11 @@ static NSString *URL = @"http://localhost:8080/Exhibits.json";
         CLBeacon *closestBeacon = [beacons firstObject];
         
         if (closestBeacon.proximity == CLProximityNear || closestBeacon.proximity == CLProximityImmediate) {
-            [self presentDetailsWithExhibit:[self exhibitWithMajorValue:closestBeacon.major.integerValue]];
+            Exhibit *exhibit = [self exhibitWithMajorValue:closestBeacon.major.integerValue];
             
-            NSString *exhibitName = [self exhibitWithMajorValue:closestBeacon.major.integerValue].exhibitName;
+            [self presentDetailsWithExhibit:exhibit];
             
-            _statuLabel.text = exhibitName;
+            _statuLabel.text = exhibit.exhibitName;
         }
         else
             [self dismissDetails];
