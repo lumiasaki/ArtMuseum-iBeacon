@@ -10,7 +10,7 @@
 #import "DetailModel.h"
 #import "Exhibit.h"
 
-static NSString *URL = @"http://localhost:8080/Exhibits.json";
+static NSString *URL = @"http://192.168.1.104:8080/Exhibits.json";
 
 @interface ViewController ()
 
