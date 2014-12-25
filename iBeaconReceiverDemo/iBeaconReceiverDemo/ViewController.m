@@ -10,7 +10,7 @@
 #import "DetailModel.h"
 #import "Exhibit.h"
 
-static NSString *URL = @"http://192.168.1.104:8080/Exhibits.json";
+//static NSString *URL = @"http://localhost:8080/Exhibits.json";
 
 @interface ViewController ()
 
@@ -20,8 +20,10 @@ static NSString *URL = @"http://192.168.1.104:8080/Exhibits.json";
 @property (strong, nonatomic) CLBeaconRegion *region;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
+@property (strong, nonatomic) NSString *URL;
 @property (nonatomic, strong) NSURLSession *session;
 @property (strong, nonatomic) DetailModel *sharedDetailModelManager;
+@property (weak, nonatomic) IBOutlet UITextField *IPAddressTextField;
 
 @end
 
@@ -45,9 +47,10 @@ static NSString *URL = @"http://192.168.1.104:8080/Exhibits.json";
     
     _sharedDetailModelManager = [DetailModel sharedModelManager];
     
-    [self jsonFromURL:[NSURL URLWithString:URL]];
+//    [self jsonFromURL:[NSURL URLWithString:_URL]];
     
-    [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
+//    [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
+    
 }
 
 #pragma mark - delegate method
@@ -174,6 +177,34 @@ static NSString *URL = @"http://192.168.1.104:8080/Exhibits.json";
     }];
     
     [dataTask resume];
+}
+
+- (IBAction)IPButtonPressed:(id)sender {
+    NSString *urlFromTextField = _IPAddressTextField.text;
+    NSString *regex = @"\\d+\.\\d+\.\\d+\.\\d+";
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
+    
+    BOOL validIP = [predicate evaluateWithObject:urlFromTextField];
+    
+    if (!validIP) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"IP Error" message:@"IP address format error" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        
+        [alert show];
+    }
+    else {
+        [_IPAddressTextField resignFirstResponder];
+        
+        _URL = [NSString stringWithFormat:@"http://%@:8080/Exhibits.json",urlFromTextField];
+        
+        [self jsonFromURL:[NSURL URLWithString:_URL]];
+        
+        [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
+
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Success" message:@"Success" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        
+        [alert show];
+    }
 }
 
 #pragma mark - set default values
