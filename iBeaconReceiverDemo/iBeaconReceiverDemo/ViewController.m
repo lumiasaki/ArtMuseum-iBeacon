@@ -16,14 +16,14 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *statuLabel;
 @property (weak, nonatomic) IBOutlet UIWebView *wikiWebView;
+@property (weak, nonatomic) IBOutlet UITextField *IPAddressTextField;
 
 @property (strong, nonatomic) CLBeaconRegion *region;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
 @property (strong, nonatomic) NSString *URL;
-@property (nonatomic, strong) NSURLSession *session;
+@property (strong, nonatomic) NSURLSession *session;
 @property (strong, nonatomic) DetailModel *sharedDetailModelManager;
-@property (weak, nonatomic) IBOutlet UITextField *IPAddressTextField;
 
 @end
 
@@ -47,9 +47,9 @@
     
     _sharedDetailModelManager = [DetailModel sharedModelManager];
     
-//    [self jsonFromURL:[NSURL URLWithString:_URL]];
+    [self jsonFromURL:[NSURL URLWithString:_URL]];
     
-//    [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
+    [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
     
 }
 
@@ -201,7 +201,7 @@
         
         [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
 
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Success" message:@"Success" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Valid" message:@"Valid formate" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
         
         [alert show];
     }
