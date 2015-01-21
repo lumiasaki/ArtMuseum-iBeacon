@@ -12,7 +12,7 @@
 
 @interface DetailModel : NSObject
 
-@property (nonatomic, strong) FMDatabase *database;
+//@property (nonatomic, strong) FMDatabase *database;
 
 + (instancetype)sharedModelManager;
 - (NSMutableArray *)generateExhibitsCollection:(NSMutableArray *)exhibits;

@@ -2,24 +2,34 @@
 //  Exhibit.m
 //  iBeaconReceiverDemo
 //
-//  Created by Lumia_Saki on 14/12/23.
-//  Copyright (c) 2014年 Lumia_Saki. All rights reserved.
+//  Created by Lumia_Saki on 15/1/21.
+//  Copyright (c) 2015年 Lumia_Saki. All rights reserved.
 //
 
 #import "Exhibit.h"
 
+
 @implementation Exhibit
 
--(instancetype)initWithMajor:(NSInteger)majorValue url:(NSString *)url artist:(NSString *)artist exhibitName:(NSString *)exhibitName
+@dynamic exhibitURL;
+@dynamic majorValue;
+@dynamic artist;
+@dynamic exhibitName;
+
++ (NSString *)entityName
 {
-    self = [super init];
-    if (self) {
-        _majorValue = majorValue;
-        _exhibitURL = url;
-        _artist = artist;
-        _exhibitName = exhibitName;
-    }
-    return self;
+    return @"Exhibit";
+}
+
++ (instancetype)insertNewObjectInManagedObjectContext:(NSManagedObjectContext *)moc
+{
+    return [NSEntityDescription insertNewObjectForEntityForName:[self entityName]
+                                         inManagedObjectContext:moc];
+}
+
++ (NSEntityDescription *)entityInManagedObjectContext:(NSManagedObjectContext *)moc
+{
+    return [NSEntityDescription entityForName:[self entityName] inManagedObjectContext:moc];
 }
 
 @end

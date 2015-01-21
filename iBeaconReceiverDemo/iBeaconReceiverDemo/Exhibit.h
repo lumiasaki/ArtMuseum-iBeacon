@@ -2,19 +2,22 @@
 //  Exhibit.h
 //  iBeaconReceiverDemo
 //
-//  Created by Lumia_Saki on 14/12/23.
-//  Copyright (c) 2014年 Lumia_Saki. All rights reserved.
+//  Created by Lumia_Saki on 15/1/21.
+//  Copyright (c) 2015年 Lumia_Saki. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-@interface Exhibit : NSObject
 
-@property (readonly, nonatomic) NSInteger majorValue;
-@property (readonly, nonatomic, strong) NSString *exhibitURL;
-@property (readonly, nonatomic, strong) NSString *artist;
-@property (readonly, nonatomic, strong) NSString *exhibitName;
+@interface Exhibit : NSManagedObject
 
--(instancetype)initWithMajor:(NSInteger)majorValue url:(NSString *)url artist:(NSString *)artist exhibitName:(NSString *)exhibitName;
+@property (nonatomic, retain) NSString * exhibitURL;
+@property (nonatomic, retain) NSNumber * majorValue;
+@property (nonatomic, retain) NSString * artist;
+@property (nonatomic, retain) NSString * exhibitName;
+
++ (instancetype)insertNewObjectInManagedObjectContext:(NSManagedObjectContext *)moc;
++ (NSEntityDescription *)entityInManagedObjectContext:(NSManagedObjectContext *)moc;
 
 @end

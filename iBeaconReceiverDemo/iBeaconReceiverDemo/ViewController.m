@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "CoreDataUtils.h"
 #import "DetailModel.h"
 #import "Exhibit.h"
 
@@ -22,8 +23,8 @@
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
 @property (strong, nonatomic) NSString *URL;
-@property (strong, nonatomic) NSURLSession *session;
-@property (strong, nonatomic) DetailModel *sharedDetailModelManager;
+//@property (strong, nonatomic) NSURLSession *session;
+//@property (strong, nonatomic) DetailModel *sharedDetailModelManager;
 
 @end
 
@@ -45,9 +46,9 @@
     
 //    [self checkLocationServicesAuthorizationStatus];  //Just for debug.
     
-    _sharedDetailModelManager = [DetailModel sharedModelManager];
+//    _sharedDetailModelManager = [DetailModel sharedModelManager];
     
-    [self jsonFromURL:[NSURL URLWithString:_URL]];
+//    [self jsonFromURL:[NSURL URLWithString:_URL]];
     
     [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
     
@@ -117,7 +118,8 @@
 
 - (Exhibit *)exhibitWithMajorValue:(NSInteger)majorValue
 {
-    Exhibit *exhibit = [_sharedDetailModelManager fetchExhibitWithMajor:majorValue];
+//    Exhibit *exhibit = [_sharedDetailModelManager fetchExhibitWithMajor:majorValue];
+    Exhibit *exhibit = [[CoreDataUtils new] fetchObjectByMajorValue:majorValue];
     
     return exhibit;
 }
@@ -142,42 +144,42 @@
     _wikiWebView.hidden = YES;
 }
 
-- (void)jsonFromURL:(NSURL *)url
-{
-    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-    
-    _session = [NSURLSession sessionWithConfiguration:config];
-    
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
-    
-    [request setHTTPMethod:@"GET"];
-    
-    __block NSMutableArray *exhibits = [NSMutableArray new];
-    
-    NSURLSessionDataTask *dataTask = [_session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-        
-        if (httpResponse.statusCode == 200) {
-            NSError *jsonError;
-            
-            exhibits = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
-            
-            NSLog(@"array:%@",exhibits);
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                //handle json data
-                NSMutableArray *exhibitsCollection = [_sharedDetailModelManager generateExhibitsCollection:exhibits];
-                
-                [_sharedDetailModelManager iteratorForExhibitsCollection:exhibitsCollection];
-            });
-        }
-        else
-            NSLog(@"Error:%@",error);
-    }];
-    
-    [dataTask resume];
-}
+//- (void)jsonFromURL:(NSURL *)url
+//{
+//    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
+//    
+//    _session = [NSURLSession sessionWithConfiguration:config];
+//    
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
+//    
+//    [request setHTTPMethod:@"GET"];
+//    
+//    __block NSMutableArray *exhibits = [NSMutableArray new];
+//    
+//    NSURLSessionDataTask *dataTask = [_session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+//        
+//        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+//        
+//        if (httpResponse.statusCode == 200) {
+//            NSError *jsonError;
+//            
+//            exhibits = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
+//            
+//            NSLog(@"array:%@",exhibits);
+//            
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                //handle json data
+//                NSMutableArray *exhibitsCollection = [_sharedDetailModelManager generateExhibitsCollection:exhibits];
+//                
+//                [_sharedDetailModelManager iteratorForExhibitsCollection:exhibitsCollection];
+//            });
+//        }
+//        else
+//            NSLog(@"Error:%@",error);
+//    }];
+//    
+//    [dataTask resume];
+//}
 
 - (IBAction)IPButtonPressed:(id)sender {
     NSString *urlFromTextField = _IPAddressTextField.text;
@@ -197,13 +199,25 @@
         
         _URL = [NSString stringWithFormat:@"http://%@:8080/Exhibits.json",urlFromTextField];
         
-        [self jsonFromURL:[NSURL URLWithString:_URL]];
+//        [self jsonFromURL:[NSURL URLWithString:_URL]];
+        
+        NSError *jsonError;
+        
+        NSData *jsonData = [NSData dataWithContentsOfURL:[NSURL URLWithString:_URL]];
+        
+        NSArray *jsonArray = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:&jsonError];
+        
+        CoreDataUtils *utilInstance = [CoreDataUtils new];  //REFECTORY,change to STATIC methods.
+        
+        [utilInstance saveToCoreData:jsonArray];
         
         [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
 
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Valid" message:@"Valid formate" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
         
         [alert show];
+        
+        [utilInstance debugFetch];
     }
 }
 
