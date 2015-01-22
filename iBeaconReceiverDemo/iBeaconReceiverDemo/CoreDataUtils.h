@@ -13,7 +13,7 @@
 
 @interface CoreDataUtils : NSObject
 
-- (void)saveToCoreData:(NSArray *)array;
-- (Exhibit *)fetchObjectByMajorValue:(NSInteger)majorValue;
-- (void)debugFetch;
++ (void)saveToCoreDataByJsonArray:(NSArray *)array;
++ (Exhibit *)fetchObjectByMajorValue:(NSInteger)majorValue;
++ (void)debugFetch;
 @end

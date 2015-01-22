@@ -8,10 +8,7 @@
 
 #import "ViewController.h"
 #import "CoreDataUtils.h"
-#import "DetailModel.h"
 #import "Exhibit.h"
-
-//static NSString *URL = @"http://localhost:8080/Exhibits.json";
 
 @interface ViewController ()
 
@@ -22,9 +19,7 @@
 @property (strong, nonatomic) CLBeaconRegion *region;
 @property (strong, nonatomic) CLLocationManager *locationManager;
 
-@property (strong, nonatomic) NSString *URL;
-//@property (strong, nonatomic) NSURLSession *session;
-//@property (strong, nonatomic) DetailModel *sharedDetailModelManager;
+@property (strong, nonatomic) NSURL *URL;
 
 @end
 
@@ -46,11 +41,7 @@
     
 //    [self checkLocationServicesAuthorizationStatus];  //Just for debug.
     
-//    _sharedDetailModelManager = [DetailModel sharedModelManager];
-    
-//    [self jsonFromURL:[NSURL URLWithString:_URL]];
-    
-    [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
+//    [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
     
 }
 
@@ -90,8 +81,6 @@
     _statuLabel.text = @"region has exited";
 }
 
-#pragma mark - private method
-
 - (void)registerBeaconRegionWithUUID:(NSUUID *)uuid andIdentifier:(NSString *)identifer
 {
     _region = [[CLBeaconRegion alloc]initWithProximityUUID:uuid identifier:identifer];
@@ -119,7 +108,7 @@
 - (Exhibit *)exhibitWithMajorValue:(NSInteger)majorValue
 {
 //    Exhibit *exhibit = [_sharedDetailModelManager fetchExhibitWithMajor:majorValue];
-    Exhibit *exhibit = [[CoreDataUtils new] fetchObjectByMajorValue:majorValue];
+    Exhibit *exhibit = [CoreDataUtils fetchObjectByMajorValue:majorValue];
     
     return exhibit;
 }
@@ -197,27 +186,23 @@
     else {
         [_IPAddressTextField resignFirstResponder];
         
-        _URL = [NSString stringWithFormat:@"http://%@:8080/Exhibits.json",urlFromTextField];
-        
-//        [self jsonFromURL:[NSURL URLWithString:_URL]];
+        _URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:8080/Exhibits.json",urlFromTextField]];
         
         NSError *jsonError;
         
-        NSData *jsonData = [NSData dataWithContentsOfURL:[NSURL URLWithString:_URL]];
+        NSData *jsonData = [NSData dataWithContentsOfURL:_URL];
         
         NSArray *jsonArray = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:&jsonError];
         
-        CoreDataUtils *utilInstance = [CoreDataUtils new];  //REFECTORY,change to STATIC methods.
-        
-        [utilInstance saveToCoreData:jsonArray];
+        [CoreDataUtils saveToCoreDataByJsonArray:jsonArray];
         
         [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
 
-        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Valid" message:@"Valid formate" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Valid" message:@"Valid format" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
         
         [alert show];
         
-        [utilInstance debugFetch];
+        [CoreDataUtils debugFetch];
     }
 }
 

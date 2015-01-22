@@ -8,26 +8,13 @@
 
 #import "CoreDataUtils.h"
 
-@interface CoreDataUtils()
-
-@property (nonatomic,strong) AppDelegate *appDelegate;
-
-@end
-
 @implementation CoreDataUtils
 
-- (instancetype)init
++ (void)saveToCoreDataByJsonArray:(NSArray *)array
 {
-    self = [super init];
-    if (self) {
-        _appDelegate = [[UIApplication sharedApplication]delegate];
-    }
-    return self;
-}
-
-- (void)saveToCoreData:(NSArray *)array
-{
-    NSManagedObjectContext *context = [_appDelegate managedObjectContext];
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    
+    NSManagedObjectContext *context = [appDelegate managedObjectContext];
     
     NSError *error;
     
@@ -51,37 +38,22 @@
     }
 }
 
-- (void)debugFetch
++ (Exhibit *)fetchObjectByMajorValue:(NSInteger)majorValue
 {
-    NSManagedObjectContext *context = [_appDelegate managedObjectContext];
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
     
-    NSFetchRequest *fetchRequest = [NSFetchRequest new];
+    NSManagedObjectContext *context = [appDelegate managedObjectContext];
     
-    NSEntityDescription *entity = [Exhibit entityInManagedObjectContext:context];
-    
-    fetchRequest.entity = entity;
-    
-    NSArray *array = [context executeFetchRequest:fetchRequest error:nil];
-    
-    NSLog(@"Entity:%@",array);
-    
-    for (Exhibit *exhibit in array) {
-        NSLog(@"majorValue: %@",exhibit.majorValue);
-    }
-}
-
-- (Exhibit *)fetchObjectByMajorValue:(NSInteger)majorValue
-{
-    NSManagedObjectContext *context = [_appDelegate managedObjectContext];
-    
-    NSFetchRequest *fetchRequest = [NSFetchRequest new];
+//    NSFetchRequest *fetchRequest = [NSFetchRequest new];
     
     NSEntityDescription *entity = [Exhibit entityInManagedObjectContext:context];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"majorValue = %d",majorValue];
     
-    fetchRequest.entity = entity;
-    fetchRequest.predicate = predicate;
+//    fetchRequest.entity = entity;
+//    fetchRequest.predicate = predicate;
+    
+    NSFetchRequest *fetchRequest = [self createFetchRequestByContext:context entity:entity predicate:predicate];
     
     NSError *error;
     
@@ -98,20 +70,24 @@
     }
 }
 
-- (void)checkForDuplicate:(NSInteger)majorValue
++ (void)checkForDuplicate:(NSInteger)majorValue
 {
-    NSManagedObjectContext *context = [_appDelegate managedObjectContext];
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    
+    NSManagedObjectContext *context = [appDelegate managedObjectContext];
     
     NSError *error;
     
-    NSFetchRequest *fetchRequest = [NSFetchRequest new];
+//    NSFetchRequest *fetchRequest = [NSFetchRequest new];
     
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"majorValue = %d",majorValue];
     
     NSEntityDescription *entity = [Exhibit entityInManagedObjectContext:context];
     
-    fetchRequest.predicate = predicate;
-    fetchRequest.entity = entity;
+//    fetchRequest.predicate = predicate;
+//    fetchRequest.entity = entity;
+    
+    NSFetchRequest *fetchRequest = [self createFetchRequestByContext:context entity:entity predicate:predicate];
     
     NSArray *array = [context executeFetchRequest:fetchRequest error:&error];
     
@@ -119,6 +95,43 @@
         Exhibit *exhibit = array[0];
         
         [context deleteObject:exhibit];
+    }
+}
+
+#pragma mark - Private method
+
++ (NSFetchRequest *)createFetchRequestByContext:(NSManagedObjectContext *)context entity:(NSEntityDescription *)entity predicate:(NSPredicate *)predicate
+{
+    NSFetchRequest *fetchRequest = [NSFetchRequest new];
+    
+    fetchRequest.entity = entity;
+    fetchRequest.predicate = predicate;
+    
+    return fetchRequest;
+}
+
+#pragma mark - Debug method
+
++ (void)debugFetch
+{
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    
+    NSManagedObjectContext *context = [appDelegate managedObjectContext];
+    
+    //    NSFetchRequest *fetchRequest = [NSFetchRequest new];
+    
+    NSEntityDescription *entity = [Exhibit entityInManagedObjectContext:context];
+    
+    //    fetchRequest.entity = entity;
+    
+    NSFetchRequest *fetchRequest = [self createFetchRequestByContext:context entity:entity predicate:nil];
+    
+    NSArray *array = [context executeFetchRequest:fetchRequest error:nil];
+    
+    NSLog(@"Entity:%@",array);
+    
+    for (Exhibit *exhibit in array) {
+        NSLog(@"majorValue: %@",exhibit.majorValue);
     }
 }
 

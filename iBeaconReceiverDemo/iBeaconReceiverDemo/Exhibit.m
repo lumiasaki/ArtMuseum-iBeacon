@@ -16,11 +16,6 @@
 @dynamic artist;
 @dynamic exhibitName;
 
-+ (NSString *)entityName
-{
-    return @"Exhibit";
-}
-
 + (instancetype)insertNewObjectInManagedObjectContext:(NSManagedObjectContext *)moc
 {
     return [NSEntityDescription insertNewObjectForEntityForName:[self entityName]
@@ -30,6 +25,13 @@
 + (NSEntityDescription *)entityInManagedObjectContext:(NSManagedObjectContext *)moc
 {
     return [NSEntityDescription entityForName:[self entityName] inManagedObjectContext:moc];
+}
+
+#pragma mark - Private method
+
++ (NSString *)entityName
+{
+    return @"Exhibit";
 }
 
 @end
