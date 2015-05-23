@@ -10,12 +10,12 @@
 #import <CoreData/CoreData.h>
 
 
-@interface Exhibit : NSManagedObject
+@interface Exhibit : NSObject
 
-@property (nonatomic, retain) NSString * exhibitURL;
-@property (nonatomic, retain) NSNumber * majorValue;
-@property (nonatomic, retain) NSString * artist;
-@property (nonatomic, retain) NSString * exhibitName;
+@property (nonatomic, strong) NSString * exhibitURL;
+@property (nonatomic, strong) NSNumber * majorValue;
+@property (nonatomic, strong) NSString * artist;
+@property (nonatomic, strong) NSString * exhibitName;
 
 + (instancetype)insertNewObjectInManagedObjectContext:(NSManagedObjectContext *)moc;
 + (NSEntityDescription *)entityInManagedObjectContext:(NSManagedObjectContext *)moc;

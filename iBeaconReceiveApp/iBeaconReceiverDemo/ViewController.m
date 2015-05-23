@@ -10,14 +10,18 @@
 #import "CoreDataUtils.h"
 #import "Exhibit.h"
 
+//static NSString *const URL_STRING = @"http://localhost:8080/exhibit";
+
 @interface ViewController ()
 
-@property (weak, nonatomic) IBOutlet UILabel *statuLabel;
+@property (weak, nonatomic) IBOutlet UILabel *statusLabel;
 @property (weak, nonatomic) IBOutlet UIWebView *wikiWebView;
 @property (weak, nonatomic) IBOutlet UITextField *IPAddressTextField;
 
 @property (strong, nonatomic) CLBeaconRegion *region;
 @property (strong, nonatomic) CLLocationManager *locationManager;
+@property (nonatomic) CLProximity proximity;
+@property (nonatomic) NSInteger major;
 
 @property (strong, nonatomic) NSURL *URL;
 
@@ -39,9 +43,10 @@
     
     _wikiWebView.hidden = YES;
     
-//    [self checkLocationServicesAuthorizationStatus];  //Just for debug.
+    _major = INT64_MAX;
+//    _isFirstTimeIn = YES;
     
-//    [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
+//    [self checkLocationServicesAuthorizationStatus];  //Just for debug.
     
 }
 
@@ -51,16 +56,29 @@
 {
     if (beacons.count > 0) {
         CLBeacon *closestBeacon = [beacons firstObject];
+
+        if (_proximity == closestBeacon.proximity || _major == [closestBeacon.major integerValue]) {
+            return;
+        } else {
+            _proximity = closestBeacon.proximity;
+            _major = [closestBeacon.major integerValue];
+        }
         
         if (closestBeacon.proximity == CLProximityNear || closestBeacon.proximity == CLProximityImmediate) {
-            Exhibit *exhibit = [self exhibitWithMajorValue:closestBeacon.major.integerValue];
-            
-            [self presentDetailsWithExhibit:exhibit];
-            
-            _statuLabel.text = exhibit.exhibitName;
-        }
-        else
+            __weak ViewController *weakSelf = self;
+
+            [self exhibitByMajorValue:closestBeacon.major.integerValue completionHandler:^(Exhibit *exhibit) {
+                if (exhibit != nil) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf presentDetailsWithExhibit:exhibit];
+                        
+                        weakSelf.statusLabel.text = exhibit.exhibitName;
+                    });
+                }
+            }];
+        } else {
             [self dismissDetails];
+        }
     }
 }
 
@@ -78,7 +96,7 @@
 {
     [_locationManager stopRangingBeaconsInRegion:_region];
 
-    _statuLabel.text = @"region has exited";
+    _statusLabel.text = @"region has exited";
 }
 
 - (void)registerBeaconRegionWithUUID:(NSUUID *)uuid andIdentifier:(NSString *)identifer
@@ -105,13 +123,13 @@
     }
 }
 
-- (Exhibit *)exhibitWithMajorValue:(NSInteger)majorValue
-{
-//    Exhibit *exhibit = [_sharedDetailModelManager fetchExhibitWithMajor:majorValue];
-    Exhibit *exhibit = [CoreDataUtils fetchObjectByMajorValue:majorValue];
-    
-    return exhibit;
-}
+//- (Exhibit *)exhibitWithMajorValue:(NSInteger)majorValue
+//{
+////    Exhibit *exhibit = [_sharedDetailModelManager fetchExhibitWithMajor:majorValue];
+//    Exhibit *exhibit = [CoreDataUtils fetchObjectByMajorValue:majorValue];
+//    
+//    return exhibit;
+//}
 
 - (void)presentDetailsWithExhibit:(Exhibit *)exhibit
 {
@@ -122,53 +140,19 @@
     _wikiWebView.hidden = NO;
     
     [_wikiWebView loadRequest:request];
+    
+//    _currentBeaconMajorValue = [exhibit.majorValue integerValue];
+//    _isFirstTimeIn = NO;
 }
 
 - (void)dismissDetails
 {
     NSLog(@"Now dismiss the details!");
     
-    _statuLabel.text = @"No.";
+    _statusLabel.text = @"No.";
     
     _wikiWebView.hidden = YES;
 }
-
-//- (void)jsonFromURL:(NSURL *)url
-//{
-//    NSURLSessionConfiguration *config = [NSURLSessionConfiguration defaultSessionConfiguration];
-//    
-//    _session = [NSURLSession sessionWithConfiguration:config];
-//    
-//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
-//    
-//    [request setHTTPMethod:@"GET"];
-//    
-//    __block NSMutableArray *exhibits = [NSMutableArray new];
-//    
-//    NSURLSessionDataTask *dataTask = [_session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-//        
-//        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-//        
-//        if (httpResponse.statusCode == 200) {
-//            NSError *jsonError;
-//            
-//            exhibits = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
-//            
-//            NSLog(@"array:%@",exhibits);
-//            
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                //handle json data
-//                NSMutableArray *exhibitsCollection = [_sharedDetailModelManager generateExhibitsCollection:exhibits];
-//                
-//                [_sharedDetailModelManager iteratorForExhibitsCollection:exhibitsCollection];
-//            });
-//        }
-//        else
-//            NSLog(@"Error:%@",error);
-//    }];
-//    
-//    [dataTask resume];
-//}
 
 - (IBAction)IPButtonPressed:(id)sender {
     NSString *urlFromTextField = _IPAddressTextField.text;
@@ -186,15 +170,15 @@
     else {
         [_IPAddressTextField resignFirstResponder];
         
-        _URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:8080/Exhibits.json",urlFromTextField]];
+        _URL = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@:8080/exhibit",urlFromTextField]];
         
-        NSError *jsonError;
+//        NSError *jsonError;
+//        
+//        NSData *jsonData = [NSData dataWithContentsOfURL:_URL];
+//        
+//        NSArray *jsonArray = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:&jsonError];
         
-        NSData *jsonData = [NSData dataWithContentsOfURL:_URL];
-        
-        NSArray *jsonArray = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:&jsonError];
-        
-        [CoreDataUtils saveToCoreDataByJsonArray:jsonArray];
+//        [CoreDataUtils saveToCoreDataByJsonArray:jsonArray];
         
         [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
 
@@ -202,8 +186,46 @@
         
         [alert show];
         
-        [CoreDataUtils debugFetch];
+//        [CoreDataUtils debugFetch];
     }
+}
+
+
+- (void)exhibitByMajorValue:(NSInteger)majorValue completionHandler:(void (^)(Exhibit *))completionHandler {
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:_URL];
+    
+    request.HTTPMethod = @"POST";
+    request.HTTPBody = [[NSString stringWithFormat:@"%ld", (long)majorValue] dataUsingEncoding:NSUTF8StringEncoding];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    
+    NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (!error) {
+            NSError *jsonError;
+            
+            NSArray *exhibitArray = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&jsonError];
+            
+            if (!jsonError && exhibitArray.count == 1) {
+                NSDictionary *exhibitDict = exhibitArray[0];
+                
+                Exhibit *exhibit = [Exhibit new];
+                
+                exhibit.exhibitURL = exhibitDict[@"exhibitURL"];
+                exhibit.exhibitName = exhibitDict[@"exhibitName"];
+                exhibit.artist = exhibitDict[@"artist"];
+                exhibit.majorValue = [NSNumber numberWithInteger:majorValue];
+                
+                if (completionHandler) {
+                    completionHandler(exhibit);
+                }
+            }
+        } else {
+            //handle error
+            NSLog(@"network error.");
+        }
+    }];
+    
+    [dataTask resume];
 }
 
 #pragma mark - set default values

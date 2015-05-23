@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+    <servlet>
+        <servlet-name>SelectServlet</servlet-name>
+        <servlet-class>com.qunar.fresh.Supermarket.Servlet.SelectServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteServlet</servlet-name>
+        <servlet-class>com.qunar.fresh.Supermarket.Servlet.DeleteServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InsertServlet</servlet-name>
+        <servlet-class>com.qunar.fresh.Supermarket.Servlet.InsertServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateServlet</servlet-name>
+        <servlet-class>com.qunar.fresh.Supermarket.Servlet.UpdateServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SelectSingle</servlet-name>
+        <servlet-class>com.qunar.fresh.Supermarket.Servlet.SelectSingleServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ValidateServlet</servlet-name>
+        <servlet-class>com.qunar.fresh.Supermarket.Servlet.ValidateServlet</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>SelectServlet</servlet-name>
+        <url-pattern>/select</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteServlet</servlet-name>
+        <url-pattern>/delete</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InsertServlet</servlet-name>
+        <url-pattern>/insert</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateServlet</servlet-name>
+        <url-pattern>/update</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SelectSingle</servlet-name>
+        <url-pattern>/selectsingle</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ValidateServlet</servlet-name>
+        <url-pattern>/validate</url-pattern>
+    </servlet-mapping>
+</web-app>

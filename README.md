@@ -5,7 +5,7 @@ Art Museum with iBeacon
 
 ~~Only for learning how to build a very beginning iBeacon.~~
 
-With this application, you can receive the relevant information at the time you are close to the exhibits.
+With this application, you can receive the relevant information at the time when you are close to the exhibits.
 
 It can partially replace the role of tour guide who works at museum.
 

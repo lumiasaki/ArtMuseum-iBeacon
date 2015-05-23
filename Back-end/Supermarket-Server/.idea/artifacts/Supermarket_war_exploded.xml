@@ -1,0 +1,22 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Supermarket:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/Supermarket_war_exploded</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="Supermarket" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: com.google.guava:guava:18.0" />
+          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.34" />
+          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.8.5" />
+          <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-core-asl:1.8.5" />
+          <element id="library" level="project" name="Maven: ch.qos.logback:logback-core:1.1.2" />
+          <element id="library" level="project" name="Maven: ch.qos.logback:logback-classic:1.1.2" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.10" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="Supermarket/web/Web" />
+    </root>
+  </artifact>
+</component>

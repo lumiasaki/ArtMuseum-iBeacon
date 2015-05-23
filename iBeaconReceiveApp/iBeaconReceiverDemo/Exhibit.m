@@ -11,10 +11,10 @@
 
 @implementation Exhibit
 
-@dynamic exhibitURL;
-@dynamic majorValue;
-@dynamic artist;
-@dynamic exhibitName;
+//@dynamic exhibitURL;
+//@dynamic majorValue;
+//@dynamic artist;
+//@dynamic exhibitName;
 
 + (instancetype)insertNewObjectInManagedObjectContext:(NSManagedObjectContext *)moc
 {

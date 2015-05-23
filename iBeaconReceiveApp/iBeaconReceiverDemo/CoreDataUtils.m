@@ -63,8 +63,7 @@
         Exhibit *exhibit = fetchedObjects[0];
         
         return exhibit;
-    }
-    else {
+    } else {
         NSLog(@"major value duplicate.");
         return nil;
     }
