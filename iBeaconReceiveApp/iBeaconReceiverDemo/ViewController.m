@@ -24,6 +24,7 @@
 @property (nonatomic) NSInteger major;
 
 @property (strong, nonatomic) NSURL *URL;
+@property (nonatomic) BOOL isExit;
 
 @end
 
@@ -38,6 +39,8 @@
     if ([_locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
         [_locationManager requestAlwaysAuthorization];
     }
+    
+    _isExit = NO;
     
     _region.notifyOnEntry = YES;
     
@@ -64,7 +67,7 @@
             _major = [closestBeacon.major integerValue];
         }
         
-        if (closestBeacon.proximity == CLProximityNear || closestBeacon.proximity == CLProximityImmediate) {
+        if (closestBeacon.proximity == CLProximityNear || closestBeacon.proximity == CLProximityImmediate || closestBeacon.proximity == CLProximityUnknown || closestBeacon.proximity == CLProximityFar) {
             __weak ViewController *weakSelf = self;
 
             [self exhibitByMajorValue:closestBeacon.major.integerValue completionHandler:^(Exhibit *exhibit) {
@@ -89,6 +92,9 @@
     [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
                                          
     [_locationManager startRangingBeaconsInRegion:_region];
+    
+    _wikiWebView.hidden = NO;
+    
     NSLog(@"enter region.");
 }
 
@@ -97,11 +103,15 @@
     [_locationManager stopRangingBeaconsInRegion:_region];
 
     _statusLabel.text = @"region has exited";
+    
+    _isExit = YES;
+    
+    [self dismissDetails];
 }
 
-- (void)registerBeaconRegionWithUUID:(NSUUID *)uuid andIdentifier:(NSString *)identifer
+- (void)registerBeaconRegionWithUUID:(NSUUID *)uuid identifier:(NSString *)identifier
 {
-    _region = [[CLBeaconRegion alloc]initWithProximityUUID:uuid identifier:identifer];
+    _region = [[CLBeaconRegion alloc]initWithProximityUUID:uuid identifier:identifier];
     
     [_locationManager startMonitoringForRegion:_region];
     
@@ -180,7 +190,7 @@
         
 //        [CoreDataUtils saveToCoreDataByJsonArray:jsonArray];
         
-        [self registerBeaconRegionWithUUID:[self defaultUUID] andIdentifier:[self defaultIdentifier]];
+        [self registerBeaconRegionWithUUID:[self defaultUUID] identifier:[self defaultIdentifier]];
 
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Valid" message:@"Valid format" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
         
